@@ -4,69 +4,148 @@ using UnityEngine;
 
 public class Murcielago : MonoBehaviour
 {
-    [SerializeField] private Transform[] wayPoints;
-    [SerializeField] private float velocidadPatrulla;
+    [Header("Movimiento")]
+    [SerializeField] private float velocidadPatrulla; // Velocidad de movimiento
+    [SerializeField] private float rangoMovimiento; // Rango de movimiento en un eje
+    private Vector3 posicionInicial;
+    private bool moviendoHorizontal = true;
+
+    [Header("Detección")]
     [SerializeField] private float danhoAtaque;
-    private Vector3 destinoActual;
-    private int indiceActual = 0;
+    [SerializeField] private float rangoDeteccion; // Rango para detectar al jugador
+    [SerializeField] private LayerMask capaJugador;
 
-    // Start is called before the first frame update
-    void Start()
+    private Transform jugador;
+
+    private void Start()
     {
-        destinoActual = wayPoints[indiceActual].position;
-        StartCoroutine(Patrulla());
+        posicionInicial = transform.position;
+        StartCoroutine(Patrullar());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-    IEnumerator Patrulla()
+    private IEnumerator Patrullar()
     {
         while (true)
         {
-            while (transform.position != destinoActual)
+            if (jugador == null) // Patrullar solo si no hay jugador detectado
             {
-                transform.position = Vector3.MoveTowards(transform.position, destinoActual, velocidadPatrulla * Time.deltaTime);
-                yield return null;
+                float nuevaPosicionX = moviendoHorizontal
+                    ? posicionInicial.x + rangoMovimiento
+                    : posicionInicial.x - rangoMovimiento;
+
+                transform.position = Vector2.MoveTowards(transform.position,
+                    new Vector2(nuevaPosicionX, transform.position.y),
+                    velocidadPatrulla * Time.deltaTime);
+
+                EnfocarDestino(nuevaPosicionX);
+
+                if (Vector2.Distance(transform.position, new Vector2(nuevaPosicionX, transform.position.y)) < 0.1f)
+                {
+                    moviendoHorizontal = !moviendoHorizontal; // Cambiar dirección de derecha a izquierda
+                }
             }
-            DefinirNuevoDestino();
+
+            yield return null;
         }
     }
-    private void DefinirNuevoDestino()
+
+    private void EnfocarDestino(float destinoX)
     {
-        indiceActual++;
-        if (indiceActual >= wayPoints.Length)
-        {
-            indiceActual = 0;
-        }
-        destinoActual = wayPoints[indiceActual].position;
-        EnfocarDestino();
+        // Orientar el murciélago hacia la dirección del movimiento
+        transform.localScale = destinoX > transform.position.x ? Vector3.one : new Vector3(-1, 1, 1);
     }
-    private void EnfocarDestino()
+
+    private void Update()
     {
-        if (destinoActual.x > transform.position.x)
+        // Detectar al jugador dentro del rango
+        Collider2D jugadorDetectado = Physics2D.OverlapCircle(transform.position, rangoDeteccion, capaJugador);
+
+        if (jugadorDetectado != null)
         {
-            transform.localScale = Vector3.one;
+            jugador = jugadorDetectado.transform;
+            PerseguirJugador();
         }
         else
         {
-            transform.localScale = new Vector3(-1, 1, 1);
+            jugador = null;
         }
     }
-    private void OnTriggerEnter2D(Collider2D elOtro)
+
+    private void PerseguirJugador()
     {
-        if (elOtro.gameObject.CompareTag("DeteccionPlayer"))
+        if (jugador != null)
         {
-            Debug.Log("Player Detectado!!!");
+            Vector3 posicionAnterior = transform.position;
+            transform.position = Vector2.MoveTowards(transform.position,
+                jugador.position,
+                velocidadPatrulla * Time.deltaTime);
 
+            // Orientar el murciélago hacia el jugador
+            EnfocarDestino(jugador.position.x);
         }
-        else if (elOtro.gameObject.CompareTag("PlayerHitBox"))
-        {
-            SistemaVidas sistemaVidas = elOtro.gameObject.GetComponent<SistemaVidas>();
-            sistemaVidas.RecibirDanho(danhoAtaque);
+    }
 
-        }
+    private void OnDrawGizmosSelected()
+    {
+        // Visualizar rango de detección en el editor
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, rangoDeteccion);
     }
 }
+
+/*[Header("Patrullaje")]
+[SerializeField] private Transform[] wayPoints;
+[SerializeField] private float velocidadPatrulla;
+
+[Header("Detección")]
+[SerializeField] private float danhoAtaque;
+[SerializeField] private LayerMask capaJugador;
+
+private Vector3 destinoActual;
+private int indiceActual = 0;
+
+public delegate void JugadorDetectadoEventHandler(Transform jugador);
+public event JugadorDetectadoEventHandler OnJugadorDetectado;
+
+private void Start()
+{
+    destinoActual = wayPoints[indiceActual].position;
+    StartCoroutine(Patrulla());
+}
+
+private IEnumerator Patrulla()
+{
+    while (true)
+    {
+        while (Vector3.Distance(transform.position, destinoActual) > 0.1f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, destinoActual, velocidadPatrulla * Time.deltaTime);
+            yield return null;
+        }
+
+        DefinirNuevoDestino();
+    }
+}
+
+private void DefinirNuevoDestino()
+{
+    indiceActual = (indiceActual + 1) % wayPoints.Length;
+    destinoActual = wayPoints[indiceActual].position; 
+    EnfocarDestino();
+}
+
+private void EnfocarDestino()
+{
+    transform.localScale = destinoActual.x > transform.position.x ? Vector3.one : new Vector3(-1, 1, 1);
+}
+
+private void OnTriggerEnter2D(Collider2D other)
+{
+    if (other.CompareTag("DeteccionPlayer"))
+    {
+        Debug.Log("Jugador detectado por Murciélago");
+        OnJugadorDetectado?.Invoke(other.transform);
+    }
+}
+
+}*/

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8725762909455468517}
   - component: {fileID: 944642710647214778}
   - component: {fileID: -5440787428582967004}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BolaFuego
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: bead47d786e844adba7899d02e8851eb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -143,7 +143,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -161,4 +161,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06b2d4212e1d24145bfa04d5ff3ef306, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  implulsoDisparo: 6
+  impulsoDisparo: 15
+  danhoAtaque: 10

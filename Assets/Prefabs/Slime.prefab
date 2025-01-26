@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c025a936c0b89784a97274348e4fb792, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vidas: 40
+  vidaMaxima: 40
 --- !u!212 &7985638597993273708
 SpriteRenderer:
   m_ObjectHideFlags: 0

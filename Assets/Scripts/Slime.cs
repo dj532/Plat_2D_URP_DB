@@ -8,20 +8,17 @@ public class Slime : MonoBehaviour
     [SerializeField] private float velocidadPatrulla;
     private Vector3 destinoActual;
     private int indiceActual = 0;
+
     [SerializeField] private float danhoAtaque;
-    // Start is called before the first frame update
-    void Start()
+    private SistemaVidas sistemaVidas;
+
+    private void Start()
     {
         destinoActual = wayPoints[indiceActual].position;
-        StartCoroutine(Patrulla()); 
+        StartCoroutine(Patrulla());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    IEnumerator Patrulla()
+    private IEnumerator Patrulla()
     {
         while (true)
         {
@@ -33,39 +30,28 @@ public class Slime : MonoBehaviour
             DefinirNuevoDestino();
         }
     }
+
     private void DefinirNuevoDestino()
     {
-        indiceActual++;
-        if (indiceActual >= wayPoints.Length)
-        {
-            indiceActual = 0;
-        }
+        indiceActual = (indiceActual + 1) % wayPoints.Length;
         destinoActual = wayPoints[indiceActual].position;
         EnfocarDestino();
     }
+
     private void EnfocarDestino()
     {
-        if(destinoActual.x > transform.position.x)
-        {
-            transform.localScale = Vector3.one;
-        }
-        else
-        {
-            transform.localScale = new Vector3(-1,1, 1);
-        }
+        transform.localScale = destinoActual.x > transform.position.x ? Vector3.one : new Vector3(-1, 1, 1);
     }
-    private void OnTriggerEnter2D(Collider2D elOtro)
+
+    private void OnTriggerEnter2D(Collider2D col)
     {
-        if (elOtro.gameObject.CompareTag("DeteccionPlayer"))
+        if (col.gameObject.CompareTag("PlayerHitBox"))
         {
-            Debug.Log("Player Detectado!!!");
-
-        }
-        else if (elOtro.gameObject.CompareTag("PlayerHitBox"))
-        {
-            SistemaVidas sistemaVidas = elOtro.gameObject.GetComponent<SistemaVidas>();
-            sistemaVidas.RecibirDanho(danhoAtaque);
-
+            SistemaVidas sistemaVidas = col.GetComponent<SistemaVidas>();
+            if (sistemaVidas != null)
+            {
+                sistemaVidas.RecibirDanho(danhoAtaque);
+            }
         }
     }
 }

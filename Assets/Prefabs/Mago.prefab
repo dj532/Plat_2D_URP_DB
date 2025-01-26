@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c025a936c0b89784a97274348e4fb792, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vidas: 80
+  vidaMaxima: 40
 --- !u!114 &6119017191497051970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,7 +67,7 @@ MonoBehaviour:
   bolaFuego: {fileID: 6136953802706875653, guid: f184ce62b46faed43ac1be27f2b1f4e9, type: 3}
   puntoSpawn: {fileID: 8419829434269721027}
   tiempoAtaque: 2
-  danhoAtaque: 20
+  danhoAtaque: 10
 --- !u!212 &7589342047818710859
 SpriteRenderer:
   m_ObjectHideFlags: 0

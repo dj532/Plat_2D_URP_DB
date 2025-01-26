@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6344968950292735195}
+  - component: {fileID: -5965930055043928555}
   - component: {fileID: 5939662697668023347}
   - component: {fileID: 5386904288398030679}
   - component: {fileID: 8750766633081500018}
@@ -38,6 +39,27 @@ Transform:
   - {fileID: 2615132451445038299}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-5965930055043928555
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7170592768265708092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96d5fb8e9edf44d46a22e1b7f0f1e9f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wayPoints: []
+  velocidadPatrulla: 7
+  danhoAtaque: 20
+  puntoDeteccionJugador: {fileID: 0}
+  rangoDeteccionJugador: 10
+  capaJugador:
+    serializedVersion: 2
+    m_Bits: 512
+  animator: {fileID: 2003818816854099244}
 --- !u!114 &5939662697668023347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50,16 +72,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29347f0a414d9664e8b9772f4924e06d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wayPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  velocidadPatrulla: 6
+  velocidadPatrulla: 5
+  rangoMovimiento: 25
   danhoAtaque: 20
+  rangoDeteccion: 10
+  capaJugador:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!114 &5386904288398030679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,7 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c025a936c0b89784a97274348e4fb792, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vidas: 60
+  vidaMaxima: 20
 --- !u!212 &8750766633081500018
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -113,7 +132,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: -4795363162621231457, guid: 6d7cd4f7505dc674c891ca8946cfd98b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

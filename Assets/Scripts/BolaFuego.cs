@@ -6,17 +6,38 @@ public class BolaFuego : MonoBehaviour
 {
 
     private Rigidbody2D rb;
-    [SerializeField] private float implulsoDisparo;
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private float impulsoDisparo; // Asegúrate de tener un valor predeterminado
+    [SerializeField] private float danhoAtaque;
+
+    public void SetDireccion(Vector3 direccion)
     {
-        rb = GetComponent<Rigidbody2D>();
-        rb.AddForce(transform.right * implulsoDisparo, ForceMode2D.Impulse);
+        // Inicializa el Rigidbody2D si aún no se ha hecho
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+
+        }
+
+        // Asegúrate de que el Rigidbody2D existe antes de aplicar la fuerza
+        if (rb != null)
+        {
+            rb.AddForce(direccion * impulsoDisparo, ForceMode2D.Impulse);
+        }
+        else
+        {
+            Debug.LogError("El Rigidbody2D no está asignado en BolaFuego.");
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D col)
     {
-        
+        if (col.gameObject.CompareTag("PlayerHitBox"))
+        {
+            SistemaVidas sistemaVidas = col.GetComponent<SistemaVidas>();
+            if (sistemaVidas != null)
+            {
+                sistemaVidas.RecibirDanho(danhoAtaque);
+            }
+        }
     }
 }
